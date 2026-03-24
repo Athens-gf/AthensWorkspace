@@ -1,0 +1,44 @@
+﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model IEnumerable<AthensWorkspace.ViewModels.LoginProviderVm>
+
+@{
+    ViewBag.Title = "ログイン";
+}
+
+<div asp-validation-summary="ModelOnly" class="text-danger">エラー</div>
+<section class="container">
+    <div class="row">
+        <div class="col-sm-8 offset-2 border pt-3 pb-3" style="background-color: aliceblue;">
+            <h4 class="text-center">本サイトのコンテンツ利用にはアカウント作成が必要です</h4>
+            <h6>連携されたアカウントはログインのためだけに利用されます。</h6>
+            <h6>ユーザーの同意なくアカウント上のコンテンツの利用を行うことはありません。</h6>
+            <br/>
+            <div class="center-block">
+                <a class="d-flex justify-content-center" asp-area="" asp-controller="Home" asp-action="Privacy"
+                   target="_blank">利用規約・プライバシーポリシー</a>
+                <br/>
+
+                @foreach (var loginProvider in Model)
+                {
+                    <form method="post" asp-action="ExternalLogin">
+                        <input type="hidden" name="returnUrl" value="@loginProvider.RedirectUrl">
+                        <button type="submit" class="btn btn-primary login-button" name="provider"
+                                value="@loginProvider.Name" title="Login using your @loginProvider.Name account."
+                                style="@loginProvider.BackStyle">
+                            <div style="align-items: center; display: flex; height: 100%;">
+                                <div style="display: flex; justify-content: center; min-width: 26px;">
+                                    <object data="@loginProvider.ImagePath" width="26px" height="26px"></object>
+                                </div>
+                                <div style="width: 10px;"></div>
+                                <div class="w-100" style="text-align: left;">
+                                    <span
+                                        class="MuiTypography-root MuiTypography-button">Singin with @loginProvider.Name</span>
+                                </div>
+                            </div>
+                        </button>
+                    </form>
+                }
+            </div>
+        </div>
+    </div>
+</section>
