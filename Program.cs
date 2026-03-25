@@ -1,4 +1,5 @@
 using AthensWorkspace.Data;
+using AthensWorkspace.MHWs.Data;
 using AthensWorkspace.Models;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.HttpOverrides;
@@ -16,6 +17,7 @@ var configuration = builder.Configuration;
 var serverVersion = new MySqlServerVersion(new Version(8, 4, 2));
 
 AddDbContext<MyIdentityDbContext>("LocalIdentity", "RemoteIdentity");
+AddDbContext<MHWsDbContext>("LocalMHWs", "RemoteMHWs");
 
 services.AddIdentity<OAuthUser, IdentityRole<int>>().AddEntityFrameworkStores<MyIdentityDbContext>();
 

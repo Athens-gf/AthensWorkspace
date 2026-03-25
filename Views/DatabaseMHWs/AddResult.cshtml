@@ -1,0 +1,28 @@
+﻿@using AthensWorkspace.MHWs.ViewModels.DatabaseFromExcel
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model AthensWorkspace.MHWs.ViewModels.Database.AddMHWsResultVm
+
+@{
+    ViewBag.Title = $"追加アップロード結果 - {SkillUpVm.SheetName}";
+}
+
+<h2>@ViewBag.Title</h2>
+<hr/>
+<table class="table">
+    <thead>
+    <tr>
+        <th>対象</th>
+        <th>追加数</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <th>
+            <a class="navbar-brand" asp-action="ListSkills">
+                @Html.DisplayNameFor(model => model.Skills)
+            </a>
+        </th>
+        <td>@Html.DisplayFor(model => model.Skills)</td>
+    </tr>
+    </tbody>
+</table>

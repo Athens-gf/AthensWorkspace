@@ -1,0 +1,66 @@
+﻿@using AthensWorkspace.MHWs.Controllers.DatabaseFromExcel
+@using AthensWorkspace.MHWs.Models
+@using AthensWorkspace.MHWs.ViewModels.DatabaseFromExcel
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model AthensWorkspace.MHWs.Models.Skill
+
+@{
+    ViewBag.Title = $"{SkillUpVm.SheetName}修正 - {Model.Id}：{Model.Name}";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<a asp-action="ListSkills">リスト</a>
+
+<form asp-action="EditSkill" onsubmit="return false;" id="form" class="container mb-3">
+    <div id="section-top">
+        <div asp-validation-summary="All" class="text-danger"></div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-3">
+            @Html.LabelFor(model => model.Id)
+            @Html.DisplayFor(model => model.Id)
+            @Html.HiddenFor(model => model.Id)
+        </div>
+        <div class="col-3">
+            @Html.LabelFor(model => model.Name)
+            @Html.EditorFor(model => model.Name)
+        </div>
+        <div class="col-6">
+            <input type="button" onclick="submit();" value="保存" class="btn btn-outline-primary w-100"/>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-3">
+            @Html.LabelFor(model => model.Ruby)
+            @Html.EditorFor(model => model.Ruby)
+        </div>
+        <div class="col-3">
+            @Html.LabelFor(model => model.MaxLevel)
+            @Html.EditorFor(model => model.MaxLevel)
+        </div>
+        <div class="col-3">
+            @Html.LabelFor(model => model.Type)
+            @Html.DropDownListFor(model => model.Type, ExSkillType.Sli(Model.Type))
+        </div>
+        <div class="col-3">
+            @Html.LabelFor(model => model.Icon)
+            @Html.DropDownListFor(model => model.Icon, DatabaseMHWsController.IconSli(Model.Icon))
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-12">
+            @Html.LabelFor(model => model.Explanation)
+            @Html.EditorFor(model => model.Explanation)
+        </div>
+    </div>
+    <div class="row mb-3">
+        <div class="col-12">
+            @Html.LabelFor(model => model.ExplanationByLevel)
+            @Html.EditorFor(model => model.ExplanationByLevel)
+        </div>
+    </div>
+</form>

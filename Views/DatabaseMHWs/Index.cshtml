@@ -1,0 +1,21 @@
+﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model AthensWorkspace.Models.Database.UploadFileModels
+
+@{
+    ViewBag.Title = "Excel読み込み - MHWs";
+}
+
+<h2>@ViewBag.Title</h2>
+<hr/>
+<a class="btn btn-outline-primary w-50" asp-action="List">リスト</a>
+<hr/>
+<div class="row">
+    <div class="col-12">
+        <form method="post" enctype="multipart/form-data" asp-action="Upload">
+            <div class="form-group">
+                <input type="submit" value="Upload by Submit" class="btn btn-primary"/>
+                <input class="form-control form-control-lg w-100" type="file" name="UploadFile" accept=".xlsx"/>
+            </div>
+        </form>
+    </div>
+</div>

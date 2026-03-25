@@ -1,0 +1,76 @@
+﻿@using AthensWorkspace.MHWs.Models
+@using AthensWorkspace.MHWs.ViewModels.DatabaseFromExcel
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using Utility
+@model IEnumerable<Skill>
+
+@{
+    ViewBag.Title = SkillUpVm.SheetName;
+}
+
+<a asp-action="Index">戻る</a>
+<h2>@ViewBag.Title</h2>
+<table class="table">
+    <thead>
+    <tr>
+        <th style="width: 5em;">編集</th>
+        <th style="width: 5em;">@Html.DisplayNameFor(model => model.Id)</th>
+        <th>@Html.DisplayNameFor(model => model.Name)</th>
+        <th>@Html.DisplayNameFor(model => model.Type)</th>
+        <th>@Html.DisplayNameFor(model => model.Order)</th>
+        <th>@Html.DisplayNameFor(model => model.MaxLevel)</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Model.OrderBy(skill => skill.Type).ThenBy(skill => skill.Order))
+    {
+        <tr>
+            <td>
+                <a asp-action="EditSkill" asp-route-id="@item.Id">編集</a>
+            </td>
+            <td>@item.Id</td>
+            <td style="height: 40px;">
+                <img src="@(item.Icon.GetPath())" class="h-100" alt="">
+                <ruby>
+                    <span>@item.Name</span>
+                    <rt>@item.Ruby</rt>
+                </ruby>
+            </td>
+            <td>@item.Type.GetText()</td>
+            <td>@item.Order</td>
+            <td>@item.MaxLevel</td>
+        </tr>
+        @if ((SkillType.T2Series | SkillType.T3Group).HasFlag(item.Type))
+        {
+            @foreach (var (explanation, index) in item.ExplanationByLevel().ZipWithIndex())
+            {
+                <tr>
+                    @if (SkillType.T2Series.HasFlag(item.Type))
+                    {
+                        <th colspan="2">@Html.DisplayFor(modelItem => item.Explanation)@(index == 0 ? 'Ⅰ' : 'Ⅱ')</th>
+                    }
+                    else
+                    {
+                        <th colspan="2">@Html.DisplayFor(modelItem => item.Explanation)</th>
+                    }
+                    <td colspan="4">@explanation</td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <th colspan="2">@Html.DisplayNameFor(model => model.Explanation)</th>
+                <td colspan="4">@Html.DisplayFor(modelItem => item.Explanation)</td>
+            </tr>
+            @foreach (var (explanation, index) in item.ExplanationByLevel().ZipWithIndex())
+            {
+                <tr>
+                    <th colspan="2">@(index + 1)</th>
+                    <td colspan="4">@explanation</td>
+                </tr>
+            }
+        }
+    }
+    </tbody>
+</table>

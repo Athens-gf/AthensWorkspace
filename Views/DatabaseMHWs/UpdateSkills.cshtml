@@ -1,0 +1,87 @@
+﻿@using AthensWorkspace.MHWs.ViewModels.DatabaseFromExcel
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using Utility
+@model AthensWorkspace.MHWs.ViewModels.DatabaseFromExcel.SkillUpVm
+
+@{
+    ViewBag.Title = $"{SkillUpVm.SheetName} - 更新";
+}
+
+<h2>@ViewBag.Title</h2>
+<form asp-action="UpdateSkills">
+    <div class="form-group">
+        <input type="submit" value="Save" class="btn btn-primary"/>
+    </div>
+    <input type="hidden" asp-for="@Model.IsRemainData"/>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>@Html.DisplayNameFor(model => model.AddedItems.FirstOrDefault()!.Id)</th>
+            <th>@Html.DisplayNameFor(model => model.AddedItems.FirstOrDefault()!.Name)</th>
+            <th>@Html.DisplayNameFor(model => model.AddedItems.FirstOrDefault()!.Ruby)</th>
+            <th>@Html.DisplayNameFor(model => model.AddedItems.FirstOrDefault()!.Type)</th>
+            <th>@Html.DisplayNameFor(model => model.AddedItems.FirstOrDefault()!.Order)</th>
+            <th>@Html.DisplayNameFor(model => model.AddedItems.FirstOrDefault()!.Icon)</th>
+            <th>@Html.DisplayNameFor(model => model.AddedItems.FirstOrDefault()!.MaxLevel)</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var (item, i) in Model.UpdateDisplayItems.ZipWithIndex())
+        {
+            <tr>
+                <td>
+                    <input type="hidden" asp-for="@Model.UpdateDbItems[i].Id"/>
+                    <input type="hidden" asp-for="@Model.UpdatedItems[i].Id"/>
+                    @Html.DisplayFor(modelItem => item.Id)
+                </td>
+                <td>
+                    <input type="hidden" asp-for="@Model.UpdateDbItems[i].Name"/>
+                    <input type="hidden" asp-for="@Model.UpdatedItems[i].Name"/>
+                    @Html.Raw(item.Name)
+                </td>
+                <td>
+                    <input type="hidden" asp-for="@Model.UpdateDbItems[i].Ruby"/>
+                    <input type="hidden" asp-for="@Model.UpdatedItems[i].Ruby"/>
+                    @Html.Raw(item.Ruby)
+                </td>
+                <td>
+                    <input type="hidden" asp-for="@Model.UpdateDbItems[i].Type"/>
+                    <input type="hidden" asp-for="@Model.UpdatedItems[i].Type"/>
+                    @Html.Raw(item.SkillType)
+                </td>
+                <td>
+                    <input type="hidden" asp-for="@Model.UpdateDbItems[i].Order"/>
+                    <input type="hidden" asp-for="@Model.UpdatedItems[i].Order"/>
+                    @Html.Raw(item.Order)
+                </td>
+                <td>
+                    <input type="hidden" asp-for="@Model.UpdateDbItems[i].Icon"/>
+                    <input type="hidden" asp-for="@Model.UpdatedItems[i].Icon"/>
+                    @Html.Raw(item.Icon)
+                </td>
+                <td>
+                    <input type="hidden" asp-for="@Model.UpdateDbItems[i].MaxLevel"/>
+                    <input type="hidden" asp-for="@Model.UpdatedItems[i].MaxLevel"/>
+                    @Html.Raw(item.MaxLevel)
+                </td>
+            </tr>
+            <tr>
+                <th colspan="2">@Html.DisplayNameFor(model => model.AddedItems.FirstOrDefault()!.Explanation)</th>
+                <td colspan="5">
+                    <input type="hidden" asp-for="@Model.UpdateDbItems[i].Explanation"/>
+                    <input type="hidden" asp-for="@Model.UpdatedItems[i].Explanation"/>
+                    @Html.Raw(item.Explanation)
+                </td>
+            </tr>
+            <tr>
+                <th colspan="2">@Html.DisplayNameFor(model => model.AddedItems.FirstOrDefault()!.ExplanationByLevel)</th>
+                <td colspan="5">
+                    <input type="hidden" asp-for="@Model.UpdateDbItems[i].ExplanationByLevel"/>
+                    <input type="hidden" asp-for="@Model.UpdatedItems[i].ExplanationByLevel"/>
+                    @Html.Raw(item.ExplanationByLevel)
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</form>

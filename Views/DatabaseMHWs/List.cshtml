@@ -1,0 +1,26 @@
+﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model AthensWorkspace.MHWs.ViewModels.Database.AddMHWsResultVm
+
+@{
+    ViewBag.Title = "目次 - スキル";
+}
+
+<h2>@ViewBag.Title</h2>
+<hr/>
+<a asp-action="Download">Excelダウンロード</a>
+<table class="table">
+    <thead>
+    <tr>
+        <th>対象</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <th>
+            <a class="navbar-brand" asp-action="ListSkills">
+                @Html.DisplayNameFor(model => model.Skills)
+            </a>
+        </th>
+    </tr>
+    </tbody>
+</table>
