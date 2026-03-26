@@ -1,0 +1,117 @@
+.btn-outline-amulet-dummy {
+    font-weight: 400;
+    line-height: 1.5;
+    padding: 0.375rem 0.75rem;
+    font-size: 1rem;
+    border-radius: 0.25rem;
+    color: #262212;
+    text-align: center;
+    text-decoration: none;
+    vertical-align: middle;
+    background-color: #D6D5D0;
+    border: 1px solid #262212;
+}
+
+.btn-outline-dummy {
+    font-weight: 400;
+    line-height: 1.5;
+    padding: 0.375rem 0.75rem;
+    font-size: 1rem;
+    border-radius: 0.25rem;
+    text-align: center;
+    text-decoration: none;
+    vertical-align: middle;
+    border: 1px solid #000;
+}
+
+.btn-outline-amulet {
+    color: #262212;
+    background-color: #D6D5D0;
+    border-color: #262212;
+}
+
+.btn-outline-amulet:hover {
+    color: #fff !important;
+    background-color: #262212 !important;
+    border-color: #262212 !important;
+}
+
+.btn-check:focus + .btn-outline-amulet, .btn-outline-amulet:focus {
+    box-shadow: 0 0 0 0.25rem rgba(33, 37, 41, 0.5);
+}
+
+.btn-check:checked + .btn-outline-amulet, .btn-check:active + .btn-outline-amulet, .btn-outline-amulet:active, .btn-outline-amulet.active, .btn-outline-amulet.dropdown-toggle.show {
+    color: #fff;
+    background-color: #262212;
+    border-color: #262212;
+}
+
+.btn-check:checked + .btn-outline-amulet:focus, .btn-check:active + .btn-outline-amulet:focus, .btn-outline-amulet:active:focus, .btn-outline-amulet.active:focus, .btn-outline-amulet.dropdown-toggle.show:focus {
+    box-shadow: 0 0 0 0.25rem rgba(33, 37, 41, 0.5);
+}
+
+.btn-outline-amulet:disabled, .btn-outline-amulet.disabled {
+    color: #262212;
+    background-color: transparent;
+}
+
+/* --- 色定義 --- */
+.btn-group1 {
+    --btn-color: #F89898;
+    --btn-shadow: rgba(248, 152, 152, 0.5);
+    --btn-txt: #000;
+}
+
+.btn-group2 {
+    --btn-color: #FF0000;
+    --btn-shadow: rgba(255, 0, 0, 0.5);
+    --btn-txt: #FFF;
+}
+
+.btn-group3 {
+    --btn-color: #990000;
+    --btn-shadow: rgba(153, 0, 0, 0.5);
+    --btn-txt: #FFF;
+}
+
+.btn-group4 {
+    --btn-color: #FF9900;
+    --btn-shadow: rgba(255, 153, 0, 0.5);
+    --btn-txt: #FFF;
+}
+
+.btn-group5 {
+    --btn-color: #93C47D;
+    --btn-shadow: rgba(147, 196, 125, 0.5);
+    --btn-txt: #000;
+}
+
+.btn-group6 {
+    --btn-color: #6AA84F;
+    --btn-shadow: rgba(106, 168, 79, 0.5);
+    --btn-txt: #000;
+}
+
+.btn-group7 {
+    --btn-color: #38761D;
+    --btn-shadow: rgba(56, 118, 29, 0.5);
+    --btn-txt: #FFF;
+}
+
+.btn-group8 {
+    --btn-color: #6FA8DC;
+    --btn-shadow: rgba(111, 168, 220, 0.5);
+    --btn-txt: #FFF;
+}
+
+.btn-group9 {
+    --btn-color: #0000FF;
+    --btn-shadow: rgba(0, 0, 255, 0.5);
+    --btn-txt: #FFF;
+}
+
+.btn-group10 {
+    --btn-color: #9900FF;
+    --btn-shadow: rgba(153, 0, 255, 0.5);
+    --btn-txt: #FFF;
+}

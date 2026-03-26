@@ -1,0 +1,170 @@
+﻿@using AthensWorkspace.Models.MHWs
+@using Utility
+@model AthensWorkspace.ViewModels.MHWs.AmuletVm
+
+<div class="row">
+    <div class="container text-center">
+        <div class="row">
+            <div class="col">
+                <button id="reset-amulet-params" type="button" class="btn btn-outline-danger w-100">リセット</button>
+            </div>
+        </div>
+        <div class="row align-items-start">
+            @foreach (var rare in ExEnum.GetIter<Rare>().OrderByDescending(rare => rare))
+            {
+                var r = (byte)rare;
+                var id = $"rare{r}";
+                var color = rare.GetColor();
+
+                <div class="rare col-6 col-sm-3 py-1" data-rare="@r">
+                    <input type="radio" class="btn-check" name="options-rare" id="@id" autocomplete="off">
+                    <label class="btn btn-outline-base w-100 no-wrap-show fs-3 py-0" for="@id"
+                           style="--btn-color: @color.ToHtml(); --btn-shadow: @color.ToHtmlWithAlpha(); --btn-txt: #FFF;">RARE@(r)
+                    </label>
+                </div>
+            }
+        </div>
+
+        <hr/>
+        <div class="row align-items-start">
+            @foreach (var slots in Model.Slots)
+            {
+                var id = $"slots{slots.Id}";
+                <div class="slots col-6 col-sm-3 py-1" data-val="@slots.ValStr">
+                    <input type="radio" class="btn-check" name="options-slot" id="@id" autocomplete="off">
+                    <label class="btn icon btn-outline-amulet w-100 no-wrap-show fs-4 pt-0 pb-1" for="@id">
+                        <img src="@(slots.Slot1.GetPath())" class="h-100" alt="">
+                        <img src="@(slots.Slot2.GetPath())" class="h-100" alt="">
+                        <img src="@(slots.Slot3.GetPath())" class="h-100" alt="">
+                    </label>
+                </div>
+            }
+        </div>
+
+        @foreach (var (serial, _) in Model.Serial2Skill)
+        {
+            <hr/>
+            <div class="row">
+                <div class="col-3"><span class="text-start fs-3 my-0">スキル@(serial)</span></div>
+                <div class="col">
+                    <button type="button" id="@($"select-skill-{serial}")" data-bs-toggle="modal"
+                            data-bs-target="@($"#modalSkill{serial}")" @(serial == 3 ? "disabled" : "")
+                            class="icon btn btn-outline-amulet w-100 text-truncate text-start fs-4 d-flex align-items-center">
+                        <img src="" class="h-100 me-2" alt="">
+                        <span class="skill-name">未設定</span>
+                        <span class="level-value ms-3"></span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="row my-2">
+                @foreach (var groupId in Model.Serial2GroupIds[serial])
+                {
+                    <div class="col-3 col-sm">
+                        <button type="button" data-bs-toggle="modal" data-bs-target="@($"#modalGroup{groupId}")"
+                                class="group serial@(serial) group@(groupId) btn btn-outline-base btn-group@(groupId) w-100 no-wrap-show fs-6 py-0"
+                                data-group="@groupId">
+                            <span class="predicted d-none">★</span>
+                            <span>Group@(groupId)</span>
+                            <span class="predicted d-none">★</span>
+                        </button>
+                    </div>
+                }
+            </div>
+        }
+        <hr/>
+        <div class="row">
+            <div class="col">
+                <button id="add-amulet" type="button" class="btn btn-outline-primary w-100" disabled>追加</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@foreach (var (serial, skills) in Model.Serial2Skill)
+{
+    var modalLabel = $"modalSkill{serial}Label";
+    var skillIdToGroupIdsClass = Model.Serial2SkillId2GroupIdsClass[serial];
+
+    <div class="modal fade" id="@($"modalSkill{serial}")" data-bs-keyboard="false" tabindex="-1"
+         aria-labelledby="@modalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="@modalLabel">スキル@(serial)設定</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row g-0">
+                        @foreach (var skill in skills)
+                        {
+                            var id = $"skill{serial}-{skill.Id}";
+                            var groupIdsClass = skillIdToGroupIdsClass[skill.Id];
+                            <div class="skill @($"skill{serial}") col-4 col-sm-3 px-1 py-1 @groupIdsClass"
+                                 data-serial=@(serial) data-skill=@(skill.Id)>
+                                <input id="@id" name="@($"options-skill{serial}")" type="radio" class="btn-check"
+                                       autocomplete="off">
+                                <label for="@id"
+                                       class="btn icon btn-outline-amulet w-100 text-truncate text-start fs-4 px-1 py-0 d-flex align-items-center">
+                                    <img src="@skill.Icon.GetPath()" class="h-75 me-2" alt="">
+                                    <span>@skill.Name</span>
+                                </label>
+                            </div>
+                        }
+                    </div>
+                </div>
+                <div class="modal-footer row">
+                    @for (var level = 1; level <= 4; level++)
+                    {
+                        var id = $"skill{serial}-level{level}";
+
+                        <div class="level serial@(serial) col-2 px-1 py-1 d-none" data-level="@level" data-serial="@serial">
+                            <input type="radio" class="btn-check" name="@($"options-skill{serial}-level")" id="@id"
+                                   autocomplete="off">
+                            <label class="btn btn-outline-amulet w-100 no-wrap-show fs-3 py-0" for="@id">
+                                Lv@(level)
+                            </label>
+                        </div>
+                    }
+                    <div class="col-3 px-1 py-1">
+                        <button id="@($"skill-select-{serial}")" type="button" data-serial="@serial"
+                                class="skill-select btn btn-outline-primary w-100 fs-3 py-0" disabled>決定
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@foreach (var (groupId, list) in Model.GroupId2Skill2Level)
+{
+    var modalLabel = $"modalGroup{groupId}Label";
+
+    <div class="modal fade" id="@($"modalGroup{groupId}")" data-bs-keyboard="false" tabindex="-1"
+         aria-labelledby="@modalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="@modalLabel">Group@(groupId)一覧</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row g-0">
+                        @foreach (var (skill, level) in list)
+                        {
+                            <div class="col-4 col-sm-3 px-1 py-1">
+                                <label
+                                    class="icon btn-outline-amulet-dummy w-100 text-truncate text-start fs-4 px-1 py-0 d-flex align-items-center">
+                                    <img src="@(skill.Icon.GetPath())" class="h-75 me-2" alt="">
+                                    <span>@(skill.Name)</span>
+                                    <span class="ms-auto">Lv@(level)</span>
+                                </label>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

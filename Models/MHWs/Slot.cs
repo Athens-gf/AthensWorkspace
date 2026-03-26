@@ -43,3 +43,15 @@ public static class ExSlot
 
     public static string ToStr(this Slot slot) => slot == Slot.None ? "" : (slot.IsWeapon() ? "武器" : "防具") + slot.GetSize();
 }
+
+public readonly record struct Slots(Slot Slot1, Slot Slot2, Slot Slot3)
+{
+    private static IEnumerable<byte> ToPattingSize(List<Slot> list, int length = 3, byte def = 0) => list
+        .Select(slot => slot.GetSize()).Concat(Enumerable.Repeat(def, Math.Max(0, length - list.Count)));
+
+    public List<Slot> List => [Slot1, Slot2, Slot3];
+    public List<Slot> Armors => List.Where(slot => slot.IsArmor()).ToList();
+    public List<Slot> Weapons => List.Where(slot => slot.IsWeapon()).ToList();
+    public string ValStr => ToPattingSize(Armors).Concat(ToPattingSize(Weapons)).Join(",");
+    public string Id => ToPattingSize(Armors).Concat(ToPattingSize(Weapons)).Join("-");
+}

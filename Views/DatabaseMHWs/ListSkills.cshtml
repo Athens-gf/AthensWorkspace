@@ -29,7 +29,7 @@
                 <a asp-action="EditSkill" asp-route-id="@item.Id">編集</a>
             </td>
             <td>@item.Id</td>
-            <td style="height: 40px;">
+            <td class="icon">
                 <img src="@(item.Icon.GetPath())" class="h-100" alt="">
                 <ruby>
                     <span>@item.Name</span>

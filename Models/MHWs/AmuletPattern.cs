@@ -4,7 +4,7 @@ namespace AthensWorkspace.Models.MHWs;
 
 public class AmuletPattern
 {
-    public byte Rare { get; set; }
+    public Rare Rare { get; set; }
     public byte Group1 { get; set; }
     public byte Group2 { get; set; }
     public byte Group3 { get; set; }
@@ -22,4 +22,7 @@ public class AmuletPattern
     public override int GetHashCode() => HashCode.Combine(Rare, Group1, Group2, Group3, (int)Slot1, (int)Slot2, (int)Slot3);
     public static bool operator ==(AmuletPattern? left, AmuletPattern? right) => Equals(left, right);
     public static bool operator !=(AmuletPattern? left, AmuletPattern? right) => !Equals(left, right);
+
+    public byte[] GroupIds => [Group1, Group2, Group3];
+    public Slots Slots => new(Slot1, Slot2, Slot3);
 }

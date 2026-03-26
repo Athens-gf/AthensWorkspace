@@ -45,6 +45,9 @@ public static class Linq
     public static IEnumerable<(T value, int index)> ZipWithIndex<T>(this IEnumerable<T> source) =>
         source.Select((t, i) => (t, i));
 
+    public static IEnumerable<(T value, int index)> ZipWithIndexBase1<T>(this IEnumerable<T> source) =>
+        source.Select((t, i) => (t, i + 1));
+
     public static IEnumerable<(T value, bool isFirst)> ZipWithIsFirst<T>(this IEnumerable<T> source) =>
         source.Select((t, i) => (t, i == 0));
 
@@ -122,6 +125,13 @@ public static class Linq
         this IEnumerable<TFirst> first,
         IEnumerable<TSecond> second) where TFirst : class where TSecond : class =>
         first.ZipAllWithNull(second, (f, s) => (f, s));
+
+    public static List<TResult> ToOrderedList<TSource, TResult>(
+        this IEnumerable<TSource> source, Func<TSource, TResult> selector
+    ) where TResult : IComparable<TResult> => source.Select(selector).Distinct().OrderBy().ToList();
+
+    public static List<T> ToOrderedList<T>(this IEnumerable<T> source) where T : IComparable<T> => source.Distinct().OrderBy().ToList();
+    public static List<T> ToOrderedList<T>(this IEnumerable<T> source, Func<T, bool> predicate) where T : IComparable<T> => source.Distinct().Where(predicate).OrderBy().ToList();
 
     #endregion
 

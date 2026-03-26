@@ -1,0 +1,35 @@
+﻿@using Utility
+@model AthensWorkspace.ViewModels.MHWs.AmuletVm
+
+<div class="row">
+    <div class="container">
+        <div class="row">
+            <h3>非表示にするスキル</h3>
+            @foreach (var (type, icon2Skills) in Model.SkillDic.OrderBy(pair => pair.Key))
+            {
+                <h5>@(type.GetText())スキル</h5>
+                <div class="row">
+                    @foreach (var (icon, skills) in icon2Skills.OrderBy(pair => pair.Key))
+                    {
+                        <div class="col-6 col-sm-3 icon">
+                            <img id="skill-icon-@((short)icon)" src="@icon.GetPath()" class="h-75 me-2" alt="">
+                            <span>@icon.GetText()</span>
+                        </div>
+                        <div class="w-100 d-sm-none"></div>
+                        @foreach (var skill in skills)
+                        {
+                            var id = $"setting-{skill.Id}";
+
+                            <div class="hidden-skill col-6 col-sm-3" data-skill="@skill.Id" data-name="@skill.Name" data-icon="@((short)icon)">
+                                <input type="checkbox" class="btn-check" id="@id" autocomplete="off">
+                                <label class="btn btn-outline-secondary w-100" for="@id">@skill.Name</label>
+                            </div>
+                        }
+
+                        <div class="w-100 mb-3"></div>
+                    }
+                </div>
+            }
+        </div>
+    </div>
+</div>

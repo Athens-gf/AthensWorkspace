@@ -1,0 +1,28 @@
+﻿@model AthensWorkspace.ViewModels.MHWs.AmuletVm
+
+<div class="row">
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <button type="button" class="btn btn-outline-primary w-100" onclick="exportAmulets()">↓エクスポート</button>
+            </div>
+            <div class="col">
+                <button type="button" class="btn btn-outline-primary w-100" onclick="importAmulets(true)">↑インポート(追加)</button>
+            </div>
+            <div class="col">
+                <button type="button" class="btn btn-outline-warning w-100" onclick="importAmulets(false)">↑インポート(上書き)</button>
+            </div>
+            <div class="col">
+                <button type="button" class="btn btn-outline-danger w-100" onclick="allRemoveAmulets()">全削除</button>
+            </div>
+        </div>
+        <div class="row">
+            <textarea class="form-control" id="import-area" rows="20"></textarea>
+        </div>
+        <span>
+            <a href="https://mhwilds.wiki-db.com/sim/">MH Wildsスキルシミュ(泣)</a>様のサイトの「お守りコピペ」のインポート・エクスポートのテキストの流用が可能です。
+            <br>
+            ※こちらが一方的に連携可能にしているだけなので、不具合があってもMH Wildsスキルシミュ(泣)様に問い合わせ等しないようお願いいたします。
+        </span>
+    </div>
+</div>

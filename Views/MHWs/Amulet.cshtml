@@ -1,0 +1,75 @@
+﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model AthensWorkspace.ViewModels.MHWs.AmuletVm
+
+@{
+    ViewBag.Title = "鑑定護石";
+}
+
+@*<partial name="../Shared/_DisplaySizeChecker"/>*@
+<div class="container">
+    <div class="row">
+        <div class="">
+            <nav class="nav nav-tabs nav-justified">
+                <button type="button" class="nav-link active" id="tab-add" data-bs-toggle="tab"
+                        data-bs-target="#tab-pane-add"
+                        role="tab" aria-controls="tab-pane-add" aria-selected="true">
+                    鑑定護石追加
+                </button>
+                <button type="button" class="nav-link" id="tab-having" data-bs-toggle="tab"
+                        data-bs-target="#tab-pane-having"
+                        role="tab" aria-controls="tab-pane-having" aria-selected="False">
+                    所持護石
+                </button>
+                <button type="button" class="nav-link" id="tab-setting" data-bs-toggle="tab"
+                        data-bs-target="#tab-pane-setting"
+                        role="tab" aria-controls="tab-pane-setting" aria-selected="False">
+                    設定
+                </button>
+            </nav>
+        </div>
+    </div>
+
+    <div class="row tab-content">
+        <div class="tab-pane active" id="tab-pane-add" role="tabpanel" aria-labelledby="tab-add" tabindex="0">
+            <partial name="_Add" for="@Model"/>
+        </div>
+        <div class="tab-pane" id="tab-pane-having" role="tabpanel" aria-labelledby="tab-having" tabindex="0">
+            <div class="row">
+                <div class="">
+                    <nav class="nav nav-tabs nav-justified">
+                        <button type="button" class="nav-link active" id="tab-list" data-bs-toggle="tab"
+                                data-bs-target="#tab-pane-list"
+                                role="tab" aria-controls="tab-pane-list" aria-selected="true">
+                            一覧
+                        </button>
+                        <button type="button" class="nav-link" id="tab-import" data-bs-toggle="tab"
+                                data-bs-target="#tab-pane-import"
+                                role="tab" aria-controls="tab-pane-import" aria-selected="False">
+                            インポート/エクスポート
+                        </button>
+                    </nav>
+                </div>
+            </div>
+            <div class="row tab-content">
+                <div class="tab-pane active" id="tab-pane-list" role="tabpanel" aria-labelledby="tab-list" tabindex="0">
+                    <partial name="_Having" for="@Model"/>
+                </div>
+                <div class="tab-pane" id="tab-pane-import" role="tabpanel" aria-labelledby="tab-import" tabindex="0">
+                    <partial name="_Import" for="@Model"/>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane" id="tab-pane-setting" role="tabpanel" aria-labelledby="tab-setting" tabindex="0">
+            <partial name="_Setting" for="@Model"/>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/mhws.css" asp-append-version="true"/>
+}
+
+@section Scripts {
+    <script src="~/js/mhws/using-db.js"></script>
+    <script src="~/js/mhws/amulet.js"></script>
+}

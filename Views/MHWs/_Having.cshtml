@@ -1,0 +1,40 @@
+﻿@using AthensWorkspace.Models.MHWs
+@using Utility
+@model AthensWorkspace.ViewModels.MHWs.AmuletVm
+
+<div class="row">
+    <div id="has-amulet-list" class="container">
+        <div id="base-has-amulet" class="has-amulet row d-none">
+            @foreach (var rare in ExEnum.GetIter<Rare>().OrderByDescending(rare => rare))
+            {
+                <span class="has-rare col-1 btn-outline-dummy text-white no-wrap-show" data-rare="@((byte)rare)"
+                      style="background-color: @(rare.GetText());">
+                    R@((byte)rare)
+                </span>
+            }
+            @foreach (var slots in Model.Slots)
+            {
+                <span class="has-slot col-4 col-sm-2 icon btn-outline-amulet-dummy no-wrap-show p-1"
+                      data-val="@slots.ValStr">
+                    <img src="@(slots.Slot1.GetPath())" alt="" style="height: 90%">
+                    <img src="@(slots.Slot2.GetPath())" alt="" style="height: 90%">
+                    <img src="@(slots.Slot3.GetPath())" alt="" style="height: 90%">
+                </span>
+            }
+            @for (var i = 1; i <= 3; i++)
+            {
+                <div
+                    class="has-skill has-skill@(i) col icon btn-outline-amulet-dummy fs-4 p-1 text-truncate text-start d-flex align-items-center">
+                    <img src="/img/mhws/icon/skill/attack.png" class="me-2" alt="" style="height: 90%">
+                    <span class="name no-wrap-show">未設定</span>
+                    <span class="level no-wrap-show ms-3">LvX</span>
+                </div>
+                if (i == 1)
+                {
+                    <div class="w-100 d-sm-none"></div>
+                }
+            }
+            <button type="button" class="col-1 btn-close bg-danger" onclick="removeAmulet(this)"></button>
+        </div>
+    </div>
+</div>

@@ -5,7 +5,7 @@ using Utility;
 
 namespace AthensWorkspace.MHWs.Models;
 
-public class Skill
+public class Skill : IComparable<Skill>
 {
     [Key] public short Id { get; set; }
     [Display(Name = "名前")] [MaxLength(32)] public string Name { get; set; } = null!;
@@ -43,6 +43,16 @@ public class Skill
 
     public static bool operator ==(Skill? left, Skill? right) => Equals(left, right);
     public static bool operator !=(Skill? left, Skill? right) => !Equals(left, right);
+
+    public int CompareTo(Skill? other)
+    {
+        if (ReferenceEquals(this, other)) return 0;
+        if (other is null) return 1;
+        var typeComparison = Type.CompareTo(other.Type);
+        if (typeComparison != 0) return typeComparison;
+        var iconComparison = Icon.CompareTo(other.Icon);
+        return iconComparison != 0 ? iconComparison : Order.CompareTo(other.Order);
+    }
 }
 
 public static class ExSkill
