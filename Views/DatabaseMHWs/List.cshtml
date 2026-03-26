@@ -7,6 +7,7 @@
 
 <h2>@ViewBag.Title</h2>
 <hr/>
+<a asp-action="Index">戻る</a>
 <a asp-action="Download">Excelダウンロード</a>
 <table class="table">
     <thead>
@@ -19,6 +20,20 @@
         <th>
             <a class="navbar-brand" asp-action="ListSkills">
                 @Html.DisplayNameFor(model => model.Skills)
+            </a>
+        </th>
+    </tr>
+    <tr>
+        <th>
+            <a class="navbar-brand" asp-action="ListAmuletPatterns">
+                @Html.DisplayNameFor(model => model.AmuletPatterns)
+            </a>
+        </th>
+    </tr>
+    <tr>
+        <th>
+            <a class="navbar-brand" asp-action="ListAmuletSkillGroups">
+                @Html.DisplayNameFor(model => model.AmuletSkillGroups)
             </a>
         </th>
     </tr>

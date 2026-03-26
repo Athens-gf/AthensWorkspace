@@ -1,0 +1,29 @@
+﻿@using AthensWorkspace.MHWs.ViewModels.DatabaseFromExcel
+@model IEnumerable<AthensWorkspace.ViewModels.MHWs.AmuletSkillGroupWrapper>
+
+@{
+    ViewBag.Title = AmuletSkillGroupUpVm.SheetName;
+}
+
+<a asp-action="Index">戻る</a>
+<h2>@ViewBag.Title</h2>
+<table class="table">
+    <thead>
+    <tr>
+        <th style="width: 5em;">@Html.DisplayNameFor(model => model.SkillGroup.Id)</th>
+        <th>@Html.DisplayNameFor(model => model.SkillGroup.SkillId)</th>
+        <th>@Html.DisplayNameFor(model => model.SkillGroup.Level)</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Model.OrderBy(wrapper => wrapper.SkillGroup.Id).ThenBy(wrapper => wrapper.Skill?.Type).ThenBy(wrapper => wrapper.Skill?.Order))
+    {
+        <tr>
+            <td>@item.SkillGroup.Id</td>
+            <td>@item.Skill?.Name</td>
+            <td>@item.SkillGroup.Level</td>
+        </tr>
+    }
+    </tbody>
+</table>
+<a asp-action="RemoveAmuletSkillGroups">全削除</a>

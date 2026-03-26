@@ -1,0 +1,45 @@
+﻿@using AthensWorkspace.MHWs.ViewModels.DatabaseFromExcel
+@using Utility
+@model IEnumerable<AthensWorkspace.Models.MHWs.AmuletPattern>
+
+@{
+    ViewBag.Title = AmuletPatternUpVm.SheetName;
+}
+
+<a asp-action="Index">戻る</a>
+<h2>@ViewBag.Title</h2>
+<table class="table">
+    <thead>
+    <tr>
+        <th style="width: 5em;">@Html.DisplayNameFor(model => model.Rare)</th>
+        <th style="width: 5em;">@Html.DisplayNameFor(model => model.Group1)</th>
+        <th style="width: 5em;">@Html.DisplayNameFor(model => model.Group2)</th>
+        <th style="width: 5em;">@Html.DisplayNameFor(model => model.Group3)</th>
+        <th style="width: 5em;">Slot</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Model
+                  .OrderBy(pattern => pattern.Rare)
+                  .ThenBy(pattern => pattern.Group1)
+                  .ThenBy(pattern => pattern.Group2)
+                  .ThenBy(pattern => pattern.Group3)
+                  .ThenBy(pattern => pattern.Slot1)
+                  .ThenBy(pattern => pattern.Slot2)
+             )
+    {
+        <tr>
+            <td>@item.Rare</td>
+            <td>@item.Group1</td>
+            <td>@item.Group2</td>
+            <td>@(item.Group3 == 0 ? "" : item.Group3)</td>
+            <td style="background-color: #262212">
+                <img src="@(item.Slot1.GetPath())" class="h-100" alt="">
+                <img src="@(item.Slot2.GetPath())" class="h-100" alt="">
+                <img src="@(item.Slot3.GetPath())" class="h-100" alt="">
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
+<a asp-action="RemoveAmuletPatterns">全削除</a>

@@ -6,6 +6,7 @@ using AthensWorkspace.MHWs.ViewModels.DatabaseFromExcel;
 using AthensWorkspace.Models;
 using AthensWorkspace.Models.Database;
 using AthensWorkspace.ViewModels.DatabaseFromExcel;
+using AthensWorkspace.ViewModels.MHWs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -48,11 +49,15 @@ public class DatabaseMHWsController(
         var uploadList = new[]
         {
             (SkillUpVm.SheetName, (Func<DataMatrix, IUploadItemVm>)(matrix => new SkillUpVm(mhwsDbContext, matrix))),
+            (AmuletPatternUpVm.SheetName, (Func<DataMatrix, IUploadItemVm>)(matrix => new AmuletPatternUpVm(mhwsDbContext, matrix))),
+            (AmuletSkillGroupUpVm.SheetName, (Func<DataMatrix, IUploadItemVm>)(matrix => new AmuletSkillGroupUpVm(mhwsDbContext, matrix))),
         };
 
         foreach (var (sheetName, ctor) in uploadList)
         {
             if (!dataMatrixDic.TryGetValue(sheetName, out var matrix)) continue;
+            Console.WriteLine(sheetName);
+            Console.WriteLine(matrix.Rows.Count);
             var upload = ctor(matrix);
             if (upload.ErrorContextOpt.NonEmpty)
                 return Content(upload.ErrorContextOpt.Get);
@@ -75,6 +80,8 @@ public class DatabaseMHWsController(
         var addResult = new AddMHWsResultVm
         {
             Skills = addCountDic.GetOrElse("Skills", 0),
+            AmuletSkillGroups = addCountDic.GetOrElse("AmuletSkillGroups", 0),
+            AmuletPatterns = addCountDic.GetOrElse("AmuletPatterns", 0),
         };
         return RedirectToAction(nameof(AddResult), addResult);
     }
@@ -98,7 +105,24 @@ public class DatabaseMHWsController(
     [ValidateAntiForgeryToken]
     public IActionResult UpdateSkills([Bind] SkillUpVm data) => UpdateItem(data);
 
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public IActionResult UpdateAmuletSkillGroups([Bind] AmuletSkillGroupUpVm data) => UpdateItem(data);
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public IActionResult UpdateAmuletPatterns([Bind] AmuletPatternUpVm data) => UpdateItem(data);
+
     public IActionResult ListSkills() => CheckAdminRedirect(() => View(mhwsDbContext.Skill.ToList()));
+
+    public IActionResult ListAmuletSkillGroups() =>
+        CheckAdminRedirect(() =>
+        {
+            var amuletSkillGroups = mhwsDbContext.AmuletSkillGroup.ToList();
+            return View(amuletSkillGroups.Select(group => new AmuletSkillGroupWrapper(group, mhwsDbContext.Skill.Find(group.SkillId))));
+        });
+
+    public IActionResult ListAmuletPatterns() => CheckAdminRedirect(() => View(mhwsDbContext.AmuletPattern.ToList()));
 
     public static IEnumerable<SelectListItem> IconSli(Icon icon) => ExEnum
         .GetIter<Icon>().Select(i => new SelectListItem { Value = ((int)i).ToString(), Text = i.GetText(), Selected = icon == i });
@@ -118,6 +142,22 @@ public class DatabaseMHWsController(
         mhwsDbContext.Update(skill);
         mhwsDbContext.SaveChanges();
         return View(skill);
+    });
+
+    public IActionResult RemoveAmuletSkillGroups() => CheckAdminRedirect(() =>
+    {
+        var groups = mhwsDbContext.AmuletSkillGroup.ToList();
+        mhwsDbContext.RemoveRange(groups);
+        mhwsDbContext.SaveChanges();
+        return RedirectToAction(nameof(ListAmuletSkillGroups));
+    });
+
+    public IActionResult RemoveAmuletPatterns() => CheckAdminRedirect(() =>
+    {
+        var patterns = mhwsDbContext.AmuletPattern.ToList();
+        mhwsDbContext.RemoveRange(patterns);
+        mhwsDbContext.SaveChanges();
+        return RedirectToAction(nameof(ListAmuletPatterns));
     });
 
     public IActionResult Download()
@@ -143,6 +183,34 @@ public class DatabaseMHWsController(
             dic["個別説明"] = explanationByLevel.Join("@");
             foreach (var (header, explanation) in explanationByLevelHeader.Zip(explanationByLevel))
                 dic[header] = explanation;
+        });
+
+        var dicSkill = skills.ToDictionary(skill => skill.Id, skill => skill.Name);
+        bookHelper.GetSheet(AmuletSkillGroupUpVm.SheetName).WriteAsTable(AmuletSkillGroupUpVm.Header, mhwsDbContext.AmuletSkillGroup.ToList(), (group, dic) =>
+        {
+            dic["グループ"] = group.Id;
+            dic["スキル"] = dicSkill[group.SkillId];
+            dic["レベル"] = group.Level;
+        });
+
+        bookHelper.GetSheet(AmuletPatternUpVm.SheetName).WriteAsTable(AmuletPatternUpVm.Header, mhwsDbContext.AmuletPattern.ToList(), (pattern, dic) =>
+        {
+            dic["Rare"] = (byte)pattern.Rare;
+            dic["Group1"] = pattern.Group1;
+            dic["Group2"] = pattern.Group2;
+            dic["Group3"] = pattern.Group3;
+
+            dic["Slot1"] = ToStr(pattern.Slot1);
+            dic["Slot2"] = ToStr(pattern.Slot2);
+            dic["Slot3"] = ToStr(pattern.Slot3);
+            return;
+
+            string ToStr(Slot slot)
+            {
+                if (slot == Slot.None) return "";
+                if (slot.IsWeapon()) return "W" + slot.GetSize();
+                return "" + slot.GetSize();
+            }
         });
 
         var fileName = $"MHWs_{DateTimeUtil.NowJst:yyyyMMdd_HHmmss}.xlsx";
